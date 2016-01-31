@@ -17,6 +17,7 @@ class User{
     static public function SetConnection(mysqli $newConnection){
         User::$connection = $newConnection;
     }
+
     static public function RegisterUser($newName, $newEmail, $password1, $password2, $newDescription){
         if($password1 !== $password2){
             return false;
@@ -66,6 +67,7 @@ class User{
 
             }
         }
+        return false;
     }
     static public function GetAllUsers(){
         $ret = [];
@@ -89,7 +91,7 @@ class User{
     private $description;
 
     public function __construct($newId, $newName, $newEmail, $newDescription){
-        $this->id = $newId;
+        $this->id = intval($newId);
         $this->email = $newEmail;
         $this->name = $newName;
         $this->setDescription($newDescription);
@@ -111,6 +113,7 @@ class User{
             $this->description = $newDescription;
         }
     }
+
     public function saveToDB(){
         $sql = "UPDATE Users SET description ='$this->description' WHERE id = $this->id";
         $result = self::$connection->query($sql);
@@ -119,12 +122,36 @@ class User{
         }
         return FALSE;
     }
+
     public function loadAllTweets(){
         $ret = [];
+
+        if(isset($_GET["userId"])){
+            $userId = $_GET["userId"];
+        }
+        else{
+            $userId = $_SESSION["userId"];
+        }
+
+        $sql = "SELECT * FROM Tweets WHERE  user_id = $userId ORDER BY tweet_date DESC";
+        $result = self::$connection->query($sql);
+
+        if($result !== FALSE){
+            if($result->num_rows > 0){
+                while($row = $result->fetch_assoc()) {
+                    $tweet = new Tweet($row['id'], $row['user_id'], $row['tweet_text'], $row['tweet_date']);
+                    //var_dump($tweet);
+                    //echo($tweet->getTweetText());
+                    $ret[] = $tweet;
+                }
+            }
+        }
+        //var_dump($ret);
+        return $ret;
+
         // TODO: Finis this function
         // TODO: It should return table of Tweets created by this user (date DESC)
 
-        return $ret;
     }
     public function loadAllSentMessages(){
         $ret = [];
