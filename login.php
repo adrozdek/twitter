@@ -2,7 +2,6 @@
 
 require_once("./src/connections.php");
 
-
 if($_SERVER["REQUEST_METHOD"] === "POST"){
     $user = User::LogInUser($_POST['email'], $_POST['password']);
     if($user !== FALSE){
@@ -12,10 +11,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     else{
         echo("Zle dane logowania");
     }
-
-
 }
-
 ?>
 
 <fieldset>

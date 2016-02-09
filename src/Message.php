@@ -1,0 +1,165 @@
+<?php
+
+/*CREATE TABLE Messages(
+    id INT AUTO_INCREMENT,
+    send_id INT NOT NULL,
+    receive_id INT NOT NULL,
+    message_text VARCHAR(200) NOT NULL,
+    message_date DATETIME NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY (send_id) REFERENCES Users(id),
+    FOREIGN KEY (recieve_id) REFERENCES Users(id)
+    );
+*/
+
+class Message{
+    static private $connection = null;
+
+    static public function SetConnection(mysqli $newConnection){
+        Message::$connection = $newConnection;
+    }
+
+    static public function CreateMessage($messageText){
+        $sendId = $_SESSION['userId'];
+        $receiveId = $_GET['id'];
+        $messageDate = date('Y-m-d H:i:s', time());
+        $opened = 1;
+        $sql = "INSERT INTO Messages(send_id, receive_id, message_text, message_date, opened) VALUES ('$sendId', '$receiveId', '$messageText', '$messageDate', '$opened')";
+        $result = self::$connection->query($sql);
+
+        if($result === TRUE){
+            $newMessage = new Message(self::$connection->insert_id, $sendId, $receiveId, $messageText, $messageDate, $opened);
+            return $newMessage;
+        }
+        echo("Nie udalo się stworzyć wiadomości");
+        return FALSE;
+    }
+
+    static public function LoadAllMessages(){
+        $ret = [];
+
+        $sql = "SELECT * FROM Messages";
+
+
+
+
+        return $ret;
+
+    }
+
+    static public function LoadMessageById($id){
+
+        $sql = "SELECT * FROM Messages where id = $id";
+        $result = self::$connection->query($sql);
+        if ($result !== FALSE) {
+
+            if ($result->num_rows === 1) {
+                $row = $result->fetch_assoc();
+                $newMessage = new Message($row['id'], $row['send_id'], $row['receive_id'], $row['message_text'], $row['message_date'], $row['opened']);
+                return $newMessage;
+            }
+
+
+        }
+        return false;
+
+    }
+
+    static public function UpdateOpened($messageId){
+        $sql = "UPDATE Messages SET opened=0 WHERE id=$messageId";
+        $result = self::$connection->query($sql);
+        if($result == TRUE){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+
+
+
+
+    private $id;
+    private $sendId;
+    private $receiveId;
+    private $messageText;
+    private $messageDate;
+    private $opened;
+
+    public function __construct($id, $sendId, $receiveId, $messageText, $messageDate, $opened)    {
+        $this->id = $id;
+        $this->sendId = $sendId;
+        $this->receiveId = $receiveId;
+        $this->messageDate = $messageDate;
+        $this->messageText = $messageText;
+        $this->opened = $opened;
+
+
+    }
+
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+
+
+    public function getSendId()
+    {
+        return $this->sendId;
+    }
+
+    public function setSendId($sendId)
+    {
+        $this->sendId = $sendId;
+    }
+
+    public function getReceiveId()
+    {
+        return $this->receiveId;
+    }
+
+    public function setReceiveId($receiveId)
+    {
+        $this->receiveId = $receiveId;
+    }
+
+    public function getOpened()
+    {
+        return $this->opened;
+    }
+
+    public function setOpened($opened)
+    {
+        $this->opened = $opened;
+    }
+
+    public function getMessageText()
+    {
+        return $this->messageText;
+    }
+
+    public function setMessageText($messageText)
+    {
+        $this->messageText = $messageText;
+    }
+
+    public function getMessageDate()
+    {
+        return $this->messageDate;
+    }
+
+    public function setMessageDate($messageDate)
+    {
+        $this->messageDate = $messageDate;
+    }
+
+
+
+
+}
+
+?>
+

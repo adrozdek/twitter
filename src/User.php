@@ -55,6 +55,7 @@ class User{
         }
         return false;
     }
+
     static public function GetUserById($idToLoad){
         $sql = "SELECT * FROM Users where id = $idToLoad";
         $result = self::$connection->query($sql);
@@ -133,13 +134,13 @@ class User{
             $userId = $_SESSION["userId"];
         }
 
-        $sql = "SELECT * FROM Tweets WHERE  user_id = $userId ORDER BY tweet_date DESC";
+        $sql = "SELECT * FROM Tweets WHERE user_id = $userId ORDER BY tweet_date DESC";
         $result = self::$connection->query($sql);
 
         if($result !== FALSE){
             if($result->num_rows > 0){
                 while($row = $result->fetch_assoc()) {
-                    $tweet = new Tweet($row['id'], $row['user_id'], $row['tweet_text'], $row['tweet_date']);
+                    $tweet = new Tweet($row['id'], $row['user_id'], $row['tweet_text'], $row['tweet_date']);    //zamiast id użytkownika mamy jego imię, można tak?
                     //var_dump($tweet);
                     //echo($tweet->getTweetText());
                     $ret[] = $tweet;
@@ -149,23 +150,52 @@ class User{
         //var_dump($ret);
         return $ret;
 
-        // TODO: Finis this function
-        // TODO: It should return table of Tweets created by this user (date DESC)
 
     }
-    public function loadAllSentMessages(){
+    public static function LoadAllSentMessages(){
         $ret = [];
-        // TODO: Finis this function
-        // TODO: It should return table of Messages sent by this user (date DESC)
+        $sentId = $_SESSION['userId'];
 
-        return $ret;
+        $sql = "SELECT * FROM Messages WHERE send_id= $sentId ORDER BY message_date DESC";
+        $result = self::$connection->query($sql);
+
+        if ($result !== FALSE) {
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $message = new Message($row['id'], $row['send_id'], $row['receive_id'], $row['message_text'], $row['message_date'], $row['opened']);
+
+                    $ret[] = $message;
+
+                }
+                //var_dump($ret);
+
+                return $ret;
+            }
+        }
+        return false;
     }
+
     public function loadAllReceivedMessages(){
         $ret = [];
-        // TODO: Finis this function
-        // TODO: It should return table of Messages this user got(date DESC)
+        $sentId = $_SESSION['userId'];
 
-        return $ret;
+        $sql = "SELECT * FROM Messages WHERE receive_id= $sentId ORDER BY message_date DESC";
+        $result = self::$connection->query($sql);
+
+        if ($result !== FALSE) {
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $message = new Message($row['id'], $row['send_id'], $row['receive_id'], $row['message_text'], $row['message_date'], $row['opened']);
+
+                    $ret[] = $message;
+
+                }
+                //var_dump($ret);
+
+                return $ret;
+            }
+        }
+        return false;
     }
 
 }
