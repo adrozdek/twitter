@@ -224,7 +224,7 @@ class User{
 
     public function setDescription($newDescription){
         if(strlen($newDescription) > 0){
-            return $this->description = $newDescription;
+            return($this->description = $newDescription);
         }
         else{
             echo("Nie udało się ustawić opisu");

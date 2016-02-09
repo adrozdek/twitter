@@ -75,7 +75,7 @@ class Tweet {
 
     public function setTweetText($newTweetText) {
         if (strlen($newTweetText) > 0) {
-            $this->tweetText = $newTweetText;
+            return($this->tweetText = $newTweetText);
         }
     }
 
