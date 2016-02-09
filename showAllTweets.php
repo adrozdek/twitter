@@ -18,6 +18,9 @@ foreach($allTweets as $tweetToShow){
     $tweetingUser = User::GetUserById($userId);
 
     echo("<h2>{$tweetingUser->getName()}</h2>");
+    if($_SESSION['userId'] != $userId){
+        echo("<a href='showUser.php?userId=$userId'>Pokaż profil'</a> <br />");
+    }
     echo("{$tweetToShow->getTweetText()} <br />");
     echo("{$tweetToShow->getTweetDate()}<br>");
     echo("<a href='showTweet.php?id={$tweetToShow->getId()}'>Show</a> <br>");

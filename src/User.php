@@ -86,6 +86,57 @@ class User{
         return $ret;
     }
 
+    static public function ChangePassword($oldpassword, $newPassword1, $newPassword2){
+
+        $userId = $_SESSION['userId'];
+        $sql = "SELECT * FROM Users WHERE id=$userId";
+        $result = self::$connection->query($sql);
+
+        if($result !== FALSE) {
+            if ($result->num_rows === 1) {
+                $row = $result->fetch_assoc();     //wyciągnięcie pierwszego rzędu z całej zwróconej tablicy(u nas jeden rząd)
+                $isPasswordOK = password_verify($oldpassword, $row['password']);
+
+                if ($isPasswordOK === TRUE) {
+
+                    if($newPassword1 !== $newPassword2){
+                        echo("Nieprawidłowe dane");
+                        return false;
+                    }
+
+                    $options = [
+                        'cost' => 11,
+                        'salt' => mcrypt_create_iv(22, MCRYPT_DEV_URANDOM)
+                    ];
+
+                    $hashedPassword = password_hash($newPassword1, PASSWORD_BCRYPT, $options);
+
+
+                    $sql2 = "UPDATE Users SET password='$hashedPassword' WHERE id=$userId";
+                    $result = self::$connection->query($sql2);
+
+                    if($result == true){
+                        echo("Hasło zostało zmienione <br />");
+                        echo("<a href='showUser.php?userId=$userId'>Wróć na stronę główną</a>");
+                        return true;
+                    }
+                    else{
+                        echo("Nieprawidłowe dane");
+                        return false;
+                    }
+                }
+                echo("Nieprawidłowe dane");
+                return false;
+            }
+        }
+        else{
+            echo("Nieprawidłowe dane");
+            return false;
+        }
+        echo("Nieprawidłowe dane");
+        return false;
+    }
+
     private $id;
     private $name;
     private $email;
@@ -95,7 +146,7 @@ class User{
         $this->id = intval($newId);
         $this->email = $newEmail;
         $this->name = $newName;
-        $this->setDescription($newDescription);
+        $this->description = $newDescription;
     }
     public function getId(){
         return $this->id;
@@ -109,20 +160,23 @@ class User{
     public function getDescription(){
         return $this->description;
     }
-    public function setDescription($newDescription){
+
+    public static function SetDescription($newDescription){
         if(is_string($newDescription)){
-            $this->description = $newDescription;
+            $userId = $_SESSION['userId'];
+            $sql = "UPDATE Users SET description ='$newDescription' WHERE id =$userId";
+            $result = self::$connection->query($sql);
+            if($result === TRUE){
+                echo("Opis został zmieniony");
+                return TRUE;
+            }
+            return("Nie udało się zmienić opisu.");
         }
+        return("Nie udało się zmienić opisu.");
+
     }
 
-    public function saveToDB(){
-        $sql = "UPDATE Users SET description ='$this->description' WHERE id = $this->id";
-        $result = self::$connection->query($sql);
-        if($result === TRUE){
-            return TRUE;
-        }
-        return FALSE;
-    }
+
 
     public function loadAllTweets(){
         $ret = [];
@@ -175,7 +229,7 @@ class User{
         return false;
     }
 
-    public function loadAllReceivedMessages(){
+    public static function LoadAllReceivedMessages(){
         $ret = [];
         $sentId = $_SESSION['userId'];
 
@@ -197,6 +251,8 @@ class User{
         }
         return false;
     }
+
+
 
 }
 

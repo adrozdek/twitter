@@ -35,17 +35,6 @@ class Message{
         return FALSE;
     }
 
-    static public function LoadAllMessages(){
-        $ret = [];
-
-        $sql = "SELECT * FROM Messages";
-
-
-
-
-        return $ret;
-
-    }
 
     static public function LoadMessageById($id){
 

@@ -20,45 +20,24 @@ Comment::SetConnection($conn);
 Message::SetConnection($conn);
 
 
+//pasek nawigacji:
+$userToUse = $_SESSION['userId'];
 
+if(isset($_SESSION['userId'])): ?>
 
+<div class="nav">
 
-//dla kolejnch klas kolejne polaczenia
+    <ul>
 
-//$server_tz = date_default_timezone_get();
-//echo $server_tz; //
+        <li><a id="main" href='../twitter/showUser.php'>Profil</a></li>
+        <li><a id="messages" href='../twitter/showMessages.php'>Wiadomości</a></li>
+        <li><a id="users" href='../twitter/showAllUsers.php'>Użytkownicy</a></li>
+        <li><a id="tweets" href='../twitter/showAllTweets.php'>Tweety</a></li>
+        <li><a id="changeDescription" href='../twitter/changeDescription.php'>Zmień opis</a></li>
+        <li><a id="changePassword" href='../twitter/changePassword.php'>Zmień hasło</a></li>
+        <li><a id="logout" href='../twitter/logout.php'>Wyloguj</a></li>
+    </ul>
 
+</div>
 
-/*
-$tweet1 = Tweet::LoadTweetById(1);
-var_dump($tweet1);
-
-
-$tweet1 = Tweet::CreateTweet(1, 'hej hej hej helo');
-var_dump($tweet1);
-*/
-
-
-/*
-$user1 = User::LogInUser("test@test.pl", "12345");
-var_dump($user1);
-
-$user = User::GetUserById(1);
-var_dump($user);
-
-$user1->setDescription("Nowy opis Agaty asdas");
-
-$isItWorking = $user1->saveToDB();
-
-var_dump($user1);
-var_dump($isItWorking);
-/*
-$user1 = User::GetAllUsers();
-var_dump($user1);
-
-$user1 = User::RegisterUser("Agata", "test@test.pl", "12345", "12345", "Opis Agaty");
-
-var_dump($user1);
-*/
-
-?>
+<?php endif; ?>

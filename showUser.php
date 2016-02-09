@@ -12,6 +12,8 @@ if (isset($_GET["userId"])) {
     $userId = $_SESSION["userId"];
 }
 
+
+
 $userToShow = User::GetUserById($userId);
 
 if ($userToShow !== FALSE) {
