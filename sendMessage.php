@@ -8,7 +8,7 @@ if (isset($_SESSION['userId']) !== TRUE) {
 }
 
 echo("<form method='POST'>
-<input type='text' name='message'>
+<textarea name='message' cols='30' rows='4'></textarea>
 <input type='submit' value='Wyślij'>
 </form>");
 

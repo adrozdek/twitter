@@ -2,13 +2,12 @@
 
 require_once("./src/connections.php");
 
-if($_SERVER["REQUEST_METHOD"] === "POST"){
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $user = User::LogInUser($_POST['email'], $_POST['password']);
-    if($user !== FALSE){
+    if ($user !== FALSE) {
         $_SESSION['userId'] = $user->getId();
         header("Location: showUser.php");
-    }
-    else{
+    } else {
         echo("Zle dane logowania");
     }
 }
@@ -34,3 +33,10 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
         </p>
     </form>
 </fieldset>
+
+<p>
+    Nie masz konta?
+    <a href='register.php' name='register'>Zarejestuj się</a>
+    
+
+</p>

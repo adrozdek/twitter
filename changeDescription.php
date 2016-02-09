@@ -6,18 +6,21 @@ if (isset($_SESSION['userId']) !== TRUE) {
     header("Location: login.php");
 }
 
+$userId = $_SESSION['userId'];
+$user = User::GetUserById($userId);
+
 ?>
 
 <form method='POST'>
-
+    Zmień opis:
     <p>
         <label>
-            Zmień opis:
-            <input type='text' name='description'>
+            <textarea name='description' cols="30" rows="4"><?php echo($user->getDescription()) ?></textarea>
         </label>
+
     </p>
 
-        <input type='submit' value='Zmień opis'>
+    <input type='submit' value='Zmień opis'>
 
 
 </form>
@@ -25,10 +28,11 @@ if (isset($_SESSION['userId']) !== TRUE) {
 
 <?php
 
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $newDescription = $_POST['description'];
 
-    User::SetDescription($newDescription);
+    User::ChangeDescription($newDescription);
+    header("Location: showUser.php");
 
 }
 

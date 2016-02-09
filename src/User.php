@@ -86,7 +86,7 @@ class User{
         return $ret;
     }
 
-    static public function ChangePassword($oldpassword, $newPassword1, $newPassword2){
+    public static function ChangePassword($oldpassword, $newPassword1, $newPassword2){
 
         $userId = $_SESSION['userId'];
         $sql = "SELECT * FROM Users WHERE id=$userId";
@@ -117,7 +117,6 @@ class User{
 
                     if($result == true){
                         echo("Hasło zostało zmienione <br />");
-                        echo("<a href='showUser.php?userId=$userId'>Wróć na stronę główną</a>");
                         return true;
                     }
                     else{
@@ -137,6 +136,68 @@ class User{
         return false;
     }
 
+    public static function ChangeDescription($newDescription){
+        if(is_string($newDescription)){
+            $userId = $_SESSION['userId'];
+            $sql = "UPDATE Users SET description ='$newDescription' WHERE id =$userId";
+            $result = self::$connection->query($sql);
+            if($result === TRUE){
+                echo("Opis został zmieniony");
+                return TRUE;
+            }
+            echo("Nie udało się zmienić opisu.");
+            return false;
+        }
+        echo("Nie udało się zmienić opisu.");
+        return false;
+    }
+
+    public static function LoadAllSentMessages(){
+        $ret = [];
+        $sentId = $_SESSION['userId'];
+
+        $sql = "SELECT * FROM Messages WHERE send_id='$sentId' ORDER BY message_date DESC";
+        $result = self::$connection->query($sql);
+
+        if ($result !== FALSE) {
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $message = new Message($row['id'], $row['send_id'], $row['receive_id'], $row['message_text'], $row['message_date'], $row['opened']);
+
+                    $ret[] = $message;
+
+                }
+                //var_dump($ret);
+
+                return $ret;
+            }
+        }
+        return false;
+    }
+
+    public static function LoadAllReceivedMessages(){
+        $ret = [];
+        $receiveId = $_SESSION['userId'];
+
+        $sql = "SELECT * FROM Messages WHERE receive_id= $receiveId ORDER BY message_date DESC";
+        $result = self::$connection->query($sql);
+
+        if ($result !== FALSE) {
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $message = new Message($row['id'], $row['send_id'], $row['receive_id'], $row['message_text'], $row['message_date'], $row['opened']);
+
+                    $ret[] = $message;
+
+                }
+                //var_dump($ret);
+
+                return $ret;
+            }
+        }
+        return false;
+    }
+
     private $id;
     private $name;
     private $email;
@@ -146,7 +207,7 @@ class User{
         $this->id = intval($newId);
         $this->email = $newEmail;
         $this->name = $newName;
-        $this->description = $newDescription;
+        $this->setDescription($newDescription);
     }
     public function getId(){
         return $this->id;
@@ -161,21 +222,15 @@ class User{
         return $this->description;
     }
 
-    public static function SetDescription($newDescription){
-        if(is_string($newDescription)){
-            $userId = $_SESSION['userId'];
-            $sql = "UPDATE Users SET description ='$newDescription' WHERE id =$userId";
-            $result = self::$connection->query($sql);
-            if($result === TRUE){
-                echo("Opis został zmieniony");
-                return TRUE;
-            }
-            return("Nie udało się zmienić opisu.");
+    public function setDescription($newDescription){
+        if(strlen($newDescription) > 0){
+            return $this->description = $newDescription;
         }
-        return("Nie udało się zmienić opisu.");
-
+        else{
+            echo("Nie udało się ustawić opisu");
+        }
+        return false;
     }
-
 
 
     public function loadAllTweets(){
@@ -206,51 +261,7 @@ class User{
 
 
     }
-    public static function LoadAllSentMessages(){
-        $ret = [];
-        $sentId = $_SESSION['userId'];
 
-        $sql = "SELECT * FROM Messages WHERE send_id= $sentId ORDER BY message_date DESC";
-        $result = self::$connection->query($sql);
-
-        if ($result !== FALSE) {
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $message = new Message($row['id'], $row['send_id'], $row['receive_id'], $row['message_text'], $row['message_date'], $row['opened']);
-
-                    $ret[] = $message;
-
-                }
-                //var_dump($ret);
-
-                return $ret;
-            }
-        }
-        return false;
-    }
-
-    public static function LoadAllReceivedMessages(){
-        $ret = [];
-        $sentId = $_SESSION['userId'];
-
-        $sql = "SELECT * FROM Messages WHERE receive_id= $sentId ORDER BY message_date DESC";
-        $result = self::$connection->query($sql);
-
-        if ($result !== FALSE) {
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $message = new Message($row['id'], $row['send_id'], $row['receive_id'], $row['message_text'], $row['message_date'], $row['opened']);
-
-                    $ret[] = $message;
-
-                }
-                //var_dump($ret);
-
-                return $ret;
-            }
-        }
-        return false;
-    }
 
 
 

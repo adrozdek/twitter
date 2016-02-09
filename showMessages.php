@@ -48,9 +48,10 @@ foreach(User::LoadAllReceivedMessages() as $message) {
     echo("<h2>Wysłane:</h2>");
 
 foreach(User::LoadAllSentMessages() as $message){
-    $u = $message->getReceiveId();
+    //var_dump($message);
+    $receiveId = $message->getReceiveId();
 
-    $receivingUser = User::GetUserById($u);
+    $receivingUser = User::GetUserById($receiveId);
     $beginning = substr($message->getMessageText(), 0, 30);
 
     echo("<h3>Odbiorca: {$receivingUser->getName()}</h3>");

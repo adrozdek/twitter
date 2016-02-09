@@ -39,7 +39,14 @@ if ($userToShow !== FALSE) {
         echo("{$tweet->getTweetText()} <br>");
         echo("{$tweet->getTweetDate()}<br>");
         $tweetId = $tweet->getId();
-        echo("<a href='showTweet.php?id={$tweetId}'>Pokaż tweeta</a>");
+        $coms = count($tweet->getAllComments($tweetId));
+        echo("Liczba komentarzy: $coms <br />");
+        echo("<a href='showTweet.php?id={$tweetId}'>Pokaż tweeta </a>");
+        if($_SESSION['userId'] == $userId){
+            echo("<a href='editTweet.php?id=$tweetId'> Edytuj</a>");
+            echo("<a href='removeTweet.php?id=$tweetId'> Usuń</a>");
+        }
+
         echo("<hr />");
     }
 } else {
@@ -50,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (strlen(trim($_POST['tweet_text'])) > 0) {
         $tweetText = $_POST['tweet_text'];
         $tweet = Tweet::CreateTweet($tweetText);
-        return $tweet;
+        header("Location: showUser.php");
     } else {
         echo("Nie udało się utworzyć tweeta :(");
     }

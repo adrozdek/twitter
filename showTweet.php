@@ -15,16 +15,8 @@ $id = $_GET['id'];
 
 $tweetToShow = Tweet::LoadTweetById($id);
 
-
-//var_dump($tweetToShow);
-//$tweetToShow->getUserId();
-//  echo($tweetToShow);
 $userId = (int)($tweetToShow->getUserId());
 $user = User::GetUserById($userId);
-//var_dump($userId);
-//var_dump($user);
-//$cos = $tweetToShow->getTweetText();
-//var_dump($cos);
 
 echo("<h1> {$user->getName()}</h1>");
 echo($tweetToShow->getTweetText() . "<br>");
@@ -60,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (strlen(trim($_POST['comment'])) > 0) {
         $commentText = $_POST['comment'];
         $comment = Comment::CreateComment($commentText);
+        header("Location: showTweet.php?id=$id");
         return $comment;
     }
     return false;
