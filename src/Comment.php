@@ -20,10 +20,9 @@ class Comment {
         Comment::$connection = $newConnection;
     }
 
-    static public function CreateComment($commentText) {
+    static public function CreateComment($tweetId, $commentText) {
         $userId = $_SESSION['userId'];
         $commentDate = date('Y-m-d H:i:s T', time());
-        $tweetId = $_GET['id'];
 
         $sql = "INSERT INTO Comments(tweet_id, user_id, comment_text, comment_date) VALUES($tweetId, $userId, '$commentText', '$commentDate')";
         $result = self::$connection->query($sql);

@@ -7,6 +7,8 @@ if (isset($_SESSION['userId']) !== TRUE) {
     header("Location: login.php");
 }
 
+$user = User::GetUserById($_SESSION['userId']);
+
 ?>
 
     <form method='POST'>
@@ -40,7 +42,7 @@ if (isset($_SESSION['userId']) !== TRUE) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    User::ChangePassword($_POST['oldpassword'], $_POST['password1'], $_POST['password2']);
+    $user->changePassword(($_POST['oldpassword']), ($_POST['password1']), ($_POST['password2']));
 
 }
 

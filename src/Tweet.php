@@ -21,6 +21,7 @@ class Tweet {
 
     static public function CreateTweet($tweetText) {
         $userId = $_SESSION["userId"];
+
         $tweetDate = date('Y-m-d H:i:s', time());  //!!!! date('w jaki sposób', time())
         $sql = "INSERT INTO Tweets(user_id, tweet_text, tweet_date) VALUES ($userId, '$tweetText', '$tweetDate')";
         $result = self::$connection->query($sql);
@@ -77,6 +78,7 @@ class Tweet {
         if (strlen($newTweetText) > 0) {
             return($this->tweetText = $newTweetText);
         }
+        return false;
     }
 
     public function getId() {
@@ -95,25 +97,10 @@ class Tweet {
         return $this->tweetDate;
     }
 
-    public function updateTweetText() {
-        $sql = "UPDATE Tweets SET tweet_text = '$this->tweetText' WHERE id = $this->id";
-        $result = self::$connection->query($sql);
-        if ($result === TRUE) {
-            return true;
-        }
-        return FALSE;
-    }
-
-    public function getAllComments($tweetIdToGive = null) {
+    public function getAllComments() {
         $ret = [];
-        if(isset($_GET['id'])){
-            $tweetId = $_GET['id'];
-        }
-        else{
-            $tweetId = $tweetIdToGive;
-        }
 
-        $sql = "SELECT * FROM Comments WHERE tweet_id = $tweetId ORDER BY comment_date DESC";
+        $sql = "SELECT * FROM Comments WHERE tweet_id =$this->id ORDER BY comment_date DESC";
         $result = self::$connection->query($sql);
 
         if ($result !== FALSE) {
@@ -128,8 +115,8 @@ class Tweet {
         return $ret;
     }
 
-    public function removeTweet($tweetId){
-        $sql = "DELETE FROM Tweets WHERE id = $tweetId";
+    public function removeTweet(){
+        $sql = "DELETE FROM Tweets WHERE id =$this->id";
         $result = self::$connection->query($sql);
 
         if($result == true){
@@ -141,8 +128,10 @@ class Tweet {
 
     }
 
-    public function updateTweet($tweetId, $tweetText) {
-        $sql = "UPDATE Tweets SET tweet_text='$tweetText' WHERE id=$tweetId";
+    public function updateTweet($tweetText) {
+        $this->setTweetText($tweetText);
+
+        $sql = "UPDATE Tweets SET tweet_text='$this->tweetText' WHERE id=$this->id";
         $result = self::$connection->query($sql);
 
         if($result == true){

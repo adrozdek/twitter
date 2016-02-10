@@ -8,18 +8,14 @@ if (isset($_SESSION['userId']) !== TRUE) {
 
     $id = $_GET['id'];
 
-
 $tweetToEdit = Tweet::LoadTweetById($id);
-//var_dump($tweetToEdit);
-//var_dump($_SESSION['userId']);
 
 if($_SESSION['userId'] == $tweetToEdit->getUserId()) {
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $tweetToEdit->updateTweet($id, $_POST['tweet_text']);
+        $tweetToEdit->updateTweet($_POST['tweet_text']);
         header("Location: showUser.php");
     }
-
 
     echo("
     <form method='POST'>
@@ -33,7 +29,7 @@ if($_SESSION['userId'] == $tweetToEdit->getUserId()) {
 
 }
 else{
-    echo("bsfvs");
+    echo("Nie masz uprawnień do edytowania tweeta!");
 }
 
 

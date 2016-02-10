@@ -14,11 +14,9 @@ echo("<h2>Odebrane:</h2>");
 
 $user = User::GetUserById($userId);
 
-foreach(User::LoadAllReceivedMessages() as $message) {
-    $u = $message->getSendId();
+foreach($user->loadAllReceivedMessages() as $message) {
 
-    $sendingUser = User::GetUserById($u);
-
+    $sendingUser = User::GetUserById($message->getSendId());
 
     echo("<h3>Nadawca: {$sendingUser->getName()}</h3>");
     $beginning = substr($message->getMessageText(), 0, 30); //pierwsze 30 znaków wiadomości
@@ -47,11 +45,10 @@ foreach(User::LoadAllReceivedMessages() as $message) {
 
     echo("<h2>Wysłane:</h2>");
 
-foreach(User::LoadAllSentMessages() as $message){
+foreach($user->loadAllSentMessages() as $message){
     //var_dump($message);
-    $receiveId = $message->getReceiveId();
 
-    $receivingUser = User::GetUserById($receiveId);
+    $receivingUser = User::GetUserById($message->getReceiveId());
     $beginning = substr($message->getMessageText(), 0, 30);
 
     echo("<h3>Odbiorca: {$receivingUser->getName()}</h3>");

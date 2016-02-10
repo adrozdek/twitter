@@ -31,7 +31,7 @@ $user = User::GetUserById($userId);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $newDescription = $_POST['description'];
 
-    User::ChangeDescription($newDescription);
+    $user->changeDescription($newDescription);
     header("Location: showUser.php");
 
 }

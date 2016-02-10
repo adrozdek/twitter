@@ -12,8 +12,6 @@ if (isset($_GET["userId"])) {
     $userId = $_SESSION["userId"];
 }
 
-
-
 $userToShow = User::GetUserById($userId);
 
 if ($userToShow !== FALSE) {
@@ -22,7 +20,6 @@ if ($userToShow !== FALSE) {
     if($_SESSION['userId'] != $userId) {
         echo("<a href='sendMessage.php?id={$userId}'>Wyślij wiadomość</a>");
     }
-
 
     if ($userToShow->getId() === $_SESSION['userId']):?>
         <h3>Nowy tweet</h3>
@@ -39,7 +36,7 @@ if ($userToShow !== FALSE) {
         echo("{$tweet->getTweetText()} <br>");
         echo("{$tweet->getTweetDate()}<br>");
         $tweetId = $tweet->getId();
-        $coms = count($tweet->getAllComments($tweetId));
+        $coms = count($tweet->getAllComments());
         echo("Liczba komentarzy: $coms <br />");
         echo("<a href='showTweet.php?id={$tweetId}'>Pokaż tweeta </a>");
         if($_SESSION['userId'] == $userId){

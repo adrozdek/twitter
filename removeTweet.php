@@ -13,7 +13,7 @@ $tweetToRemove = Tweet::LoadTweetById($id);
 if ($_SESSION['userId'] == $tweetToRemove->getUserId()) {
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $tweetToRemove->removeTweet($id);
+        $tweetToRemove->removeTweet();
         header("Location: showUser.php");
     }
 
@@ -26,5 +26,8 @@ if ($_SESSION['userId'] == $tweetToRemove->getUserId()) {
 
     </form>
     ");
+}
+else{
+    echo("Nie masz uprawnień!");
 }
 ?>

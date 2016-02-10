@@ -19,9 +19,7 @@ class Message {
         Message::$connection = $newConnection;
     }
 
-    static public function CreateMessage($messageText) {
-        $sendId = $_SESSION['userId'];
-        $receiveId = $_GET['id'];
+    static public function CreateMessage($sendId, $receiveId, $messageText) {
         $messageDate = date('Y-m-d H:i:s', time());
         $opened = 1;
         $sql = "INSERT INTO Messages(send_id, receive_id, message_text, message_date, opened) VALUES ('$sendId', '$receiveId', '$messageText', '$messageDate', '$opened')";
@@ -47,17 +45,6 @@ class Message {
             }
         }
         return false;
-
-    }
-
-    static public function UpdateOpened($messageId) {
-        $sql = "UPDATE Messages SET opened=0 WHERE id=$messageId";
-        $result = self::$connection->query($sql);
-        if ($result == TRUE) {
-            return true;
-        } else {
-            return false;
-        }
 
     }
 
@@ -131,6 +118,15 @@ class Message {
         return($this->messageDate = $messageDate);
     }
 
+    public function updateOpened() {
+        $sql = "UPDATE Messages SET opened=0 WHERE id=$this->id";
+        $result = self::$connection->query($sql);
+        if ($result == TRUE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
 

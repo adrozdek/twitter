@@ -7,38 +7,34 @@ if (isset($_SESSION['userId']) !== TRUE) {
 }
 
 $messageId = $_GET['id'];
-
-
 //var_dump(Message::LoadMessageById($messageId));
 $messageToShow = Message::LoadMessageById($messageId);
 
+if($messageToShow->getSendId() == $_SESSION['userId'] || $messageToShow->getReceiveId() == $_SESSION['userId']) {
 
-$sendingUser = User::GetUserById($messageToShow->getSendId());
-$receiveingUser = User::GetUserById($messageToShow->getReceiveId());
+    $sendingUser = User::GetUserById($messageToShow->getSendId());
+    $receiveingUser = User::GetUserById($messageToShow->getReceiveId());
 
 //var_dump($receiveingUser);
 
-
-if($_SESSION['userId'] == $messageToShow->getReceiveId()) {
-    Message::UpdateOpened($messageId);
-}
+    if ($_SESSION['userId'] == $messageToShow->getReceiveId()) {
+        $messageToShow->updateOpened();
+    }
 
 //var_dump($sendingUser);
 
-echo("<strong> Odbiorca:</strong> {$receiveingUser->getName()} <br />
+    echo("<strong> Odbiorca:</strong> {$receiveingUser->getName()} <br />
     <strong>Nadawca:</strong> {$sendingUser->getName()} <br />
     <strong>Treść: </strong> {$messageToShow->getMessageText()} <br />
     {$messageToShow->getMessageDate()} <br />");
 
-if($_SESSION['userId'] != $messageToShow->getReceiveId()) {  //wysłanie kolejnej wiadomości do tego samego użytkownika
+    if ($_SESSION['userId'] != $messageToShow->getReceiveId()) {  //wysłanie kolejnej wiadomości do tego samego użytkownika
+        echo("<a href='sendMessage.php?id={$receiveingUser->getId()}'>Wyślij kolejną wiadomość do {$receiveingUser->getName()}</a> <br />");
+    }
 
-    echo("<a href='sendMessage.php?id={$receiveingUser->getId()}'>Wyślij kolejną wiadomość do {$receiveingUser->getName()}</a> <br />");
-}
-
-if($_SESSION['userId'] != $messageToShow->getSendId()) {  //wysłanie odpowiedzi na wiadomość użytkownika
-
-    echo("<a href='sendMessage.php?id={$sendingUser->getId()}'>Odpowiedz użytkownikowi {$sendingUser->getName()}</a> <br />");
-}
+    if ($_SESSION['userId'] != $messageToShow->getSendId()) {  //wysłanie odpowiedzi na wiadomość użytkownika
+        echo("<a href='sendMessage.php?id={$sendingUser->getId()}'>Odpowiedz użytkownikowi {$sendingUser->getName()}</a> <br />");
+    }
 
     echo("<a href='showMessages.php'>Wróć do wszystkich wiadomości</a>
     ");
@@ -49,7 +45,7 @@ if($_SESSION['userId'] != $messageToShow->getSendId()) {  //wysłanie odpowiedzi
 //var_dump($messageToShow->getReceiveId()); //string
 
 
-
+}
 
 
 

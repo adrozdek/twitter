@@ -23,7 +23,7 @@ foreach($allTweets as $tweetToShow){
     echo("{$tweetToShow->getTweetDate()}<br>");
 
     $tweetToShowId = $tweetToShow->getId();
-    $coms = count($tweetToShow->getAllComments($tweetToShowId));
+    $coms = count($tweetToShow->getAllComments());
     echo("Liczba komentarzy: $coms <br />");
 
     echo("<a href='showTweet.php?id={$tweetToShow->getId()}'>Pokaż </a>");
