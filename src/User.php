@@ -248,6 +248,67 @@ class User
         return false;
     }
 
+    public function checkIfYouAskedFS($friend2) {
+        $sql = "SELECT * FROM Friends WHERE friend1_id = $this->id AND friend2_id = $friend2";
+        $result = self::$connection->query($sql);
+
+        if($result == true) {
+            if($result->num_rows != 0) {
+                return true;
+            } else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
+
+    }
+
+    public function checkIfFriendshipExist($friend2) {
+        //do zmiany w jedno zapytanie:
+        $sql = "SELECT * FROM Friends WHERE (friend1_id = $this->id AND friend2_id = $friend2 AND accepted = 1) OR (friend2_id = $this->id AND friend1_id = $friend2 AND accepted = 1)";
+        $result = self::$connection->query($sql);
+
+        if($result == true) {
+            if($result->num_rows != 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
+    }
+
+    public function acceptFriendship($friendAsking) {
+        $sql = "UPDATE Friends SET accepted = 1 WHERE friend2_id = $this->id AND friend1_id = $friendAsking";
+        $result = self::$connection->query($sql);
+
+        if($result == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function removeFriendship($friendAsking) {
+        $sql = "DELETE FROM Friends WHERE (friend1_id = $this->id AND friend2_id = $friendAsking) OR (friend1_id = $friendAsking AND friend2_id = $this->id) ";
+        $result = self::$connection->query($sql);
+
+        if($result == true){
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+
+
 }
 
 ?>

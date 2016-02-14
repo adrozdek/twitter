@@ -7,6 +7,7 @@ require_once(dirname(__FILE__) . "/User.php");
 require_once(dirname(__FILE__) . "/Tweet.php");
 require_once(dirname(__FILE__) . "/Comment.php");
 require_once(dirname(__FILE__) . "/Message.php");
+require_once(dirname(__FILE__) . "/Friend.php");
 
 $conn = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
 
@@ -18,7 +19,7 @@ User::SetConnection($conn); //żeby klasa user potrafila polaczyc sie z baza dan
 Tweet::SetConnection($conn);
 Comment::SetConnection($conn);
 Message::SetConnection($conn);
-
+Friend::SetConnection($conn);
 
 //pasek nawigacji:
 $userToUse = $_SESSION['userId'];

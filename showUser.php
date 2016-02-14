@@ -8,6 +8,7 @@ if (isset($_SESSION['userId']) !== TRUE) {
 
 if (isset($_GET["userId"])) {
     $userId = $_GET["userId"];
+
 } else {
     $userId = $_SESSION["userId"];
 }
@@ -18,8 +19,25 @@ if ($userToShow !== FALSE) {
     echo("<h2>{$userToShow->getName()}</h2>");   //nawiasy klamrowe wymagane
     echo("O mnie: {$userToShow->getDescription()} <br />");
     if($_SESSION['userId'] != $userId) {
-        echo("<a href='sendMessage.php?id={$userId}'>Wyślij wiadomość</a>");
+        echo("<a href='sendMessage.php?id={$userId}'>Wyślij wiadomość <br/> </a>");
+
+        $friendToUser = User::GetUserById($_SESSION['userId']);
+
+        if($friendToUser->checkIfFriendshipExist($userId)) {
+            echo("Przyjaciel");
+        }
+        elseif($friendToUser->checkIfYouAskedFS($userId)) {
+            echo("<a href='addFriend.php?id={$userId}'>Usuń zaproszenie do znajomych</a>");
+        }
+        elseif($userToShow->checkIfYouAskedFS($_SESSION['userId'])){
+            echo("<a href='addFriend.php?id={$userId}'>Potwierdź zaproszenie do znajomych</a>");
+
+        } else{
+            echo("<a href='addFriend.php?id={$userId}'>Wyślij zaproszenie do znajomych</a>");
+
+        }
     }
+
 
     if ($userToShow->getId() === $_SESSION['userId']):?>
         <h3>Nowy tweet</h3>
