@@ -30,7 +30,6 @@ class Tweet {
             $newTweet = new Tweet(self::$connection->insert_id, $userId, $tweetText);
             return $newTweet;
         }
-        echo("Nie udało się utworzyć tweeta :(");
         return false;
     }
 
@@ -120,10 +119,10 @@ class Tweet {
         $result = self::$connection->query($sql);
 
         if($result == true){
-            echo("Tweet został usunięty");
+            return true;
         }
         else{
-            echo("Nie udało się usunąć tweeta");
+            return false;
         }
 
     }
@@ -135,10 +134,10 @@ class Tweet {
         $result = self::$connection->query($sql);
 
         if($result == true){
-            echo("Tweet został edytowany");
+            return true;
         }
         else{
-            echo("Nie udało się edytować tweeta");
+            return false;
         }
     }
 

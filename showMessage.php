@@ -10,7 +10,8 @@ $messageId = $_GET['id'];
 //var_dump(Message::LoadMessageById($messageId));
 $messageToShow = Message::LoadMessageById($messageId);
 
-if($messageToShow->getSendId() == $_SESSION['userId'] || $messageToShow->getReceiveId() == $_SESSION['userId']) {
+if ($messageToShow->getSendId() == $_SESSION['userId'] || $messageToShow->getReceiveId() == $_SESSION['userId']) {
+    //zagwarantowanie, że wiadomość może zobaczyć tylko wysyłający, bądź odbiorca
 
     $sendingUser = User::GetUserById($messageToShow->getSendId());
     $receiveingUser = User::GetUserById($messageToShow->getReceiveId());
@@ -46,11 +47,6 @@ if($messageToShow->getSendId() == $_SESSION['userId'] || $messageToShow->getRece
 
 
 }
-
-
-
-
-
 
 
 ?>

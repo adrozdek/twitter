@@ -10,8 +10,9 @@ require_once(dirname(__FILE__) . "/Message.php");
 require_once(dirname(__FILE__) . "/Friend.php");
 
 $conn = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
+mysql_query("SET NAMES utf8");
 
-if($conn->connect_errno){   //error number
+if ($conn->connect_errno) {   //error number
     die("Db connection not initialized properly " . $conn->connect_error);
 }
 
@@ -24,21 +25,31 @@ Friend::SetConnection($conn);
 //pasek nawigacji:
 $userToUse = $_SESSION['userId'];
 
-if(isset($_SESSION['userId'])): ?>
+if (isset($_SESSION['userId'])): ?>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <!--<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> -->
 
-<div class="nav">
+    </head>
 
-    <ul>
+    <body>
+    <div class="nav">
 
-        <li><a id="main" href='../twitter/showUser.php'>Profil</a></li>
-        <li><a id="messages" href='../twitter/showMessages.php'>Wiadomości</a></li>
-        <li><a id="users" href='../twitter/showAllUsers.php'>Użytkownicy</a></li>
-        <li><a id="tweets" href='../twitter/showAllTweets.php'>Tweety</a></li>
-        <li><a id="changeDescription" href='../twitter/changeDescription.php'>Zmień opis</a></li>
-        <li><a id="changePassword" href='../twitter/changePassword.php'>Zmień hasło</a></li>
-        <li><a id="logout" href='../twitter/logout.php'>Wyloguj</a></li>
-    </ul>
+        <ul>
+            <li><a id="indeks" href='../twitter/indeks.php'>Profil</a></li>
+            <li><a id="main" href='../twitter/showUser.php'>Profil</a></li>
+            <li><a id="messages" href='../twitter/showMessages.php'><?php echo utf8_encode("Wiadomości") ?></a></li>
+            <li><a id="users" href='../twitter/showAllUsers.php'>Użytkownicy</a></li>
+            <li><a id="users" href='../twitter/showAllFriends.php'>Przyjaźnie</a></li>
+            <li><a id="tweets" href='../twitter/showAllTweets.php'>Tweety</a></li>
+            <li><a id="changeDescription" href='../twitter/changeDescription.php'>Zmień opis</a></li>
+            <li><a id="changePassword" href='../twitter/changePassword.php'>Zmień hasło</a></li>
+            <li><a id="logout" href='../twitter/logout.php'>Wyloguj</a></li>
+        </ul>
 
-</div>
+    </div>
+    </body>
+    </html>
 
 <?php endif; ?>

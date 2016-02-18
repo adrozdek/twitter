@@ -38,6 +38,7 @@ foreach($user->loadAllReceivedMessages() as $message) {
     }
 
     echo("<a href='showMessage.php?id={$message->getId()}'>Pokaż wiadomość</a>");  //przekierowanie do strony konkretnej wiadomości
+    echo("<hr /><br />");
 
 }
 
@@ -70,6 +71,7 @@ foreach($user->loadAllSentMessages() as $message){
     }
 
     echo("<a href='showMessage.php?id={$message->getId()}'>Pokaż wiadomość</a>");
+    echo("<hr />");
 }
 
 

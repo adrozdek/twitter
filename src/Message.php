@@ -29,7 +29,6 @@ class Message {
             $newMessage = new Message(self::$connection->insert_id, $sendId, $receiveId, $messageText, $messageDate, $opened);
             return $newMessage;
         }
-        echo("Nie udalo się stworzyć wiadomości");
         return FALSE;
     }
 

@@ -24,7 +24,7 @@ if ($userToShow !== FALSE) {
         $friendToUser = User::GetUserById($_SESSION['userId']);
 
         if($friendToUser->checkIfFriendshipExist($userId)) {
-            echo("Przyjaciel");
+            echo("Przyjaciel :)");
         }
         elseif($friendToUser->checkIfYouAskedFS($userId)) {
             echo("<a href='addFriend.php?id={$userId}'>Usuń zaproszenie do znajomych</a>");
@@ -34,7 +34,6 @@ if ($userToShow !== FALSE) {
 
         } else{
             echo("<a href='addFriend.php?id={$userId}'>Wyślij zaproszenie do znajomych</a>");
-
         }
     }
 

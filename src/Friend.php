@@ -21,7 +21,6 @@ class Friend {
     }
 
 
-
     private $id;
     private $friend1;
     private $friend2;

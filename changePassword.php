@@ -42,7 +42,12 @@ $user = User::GetUserById($_SESSION['userId']);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $user->changePassword(($_POST['oldpassword']), ($_POST['password1']), ($_POST['password2']));
+    if($user->changePassword(($_POST['oldpassword']), ($_POST['password1']), ($_POST['password2']))){
+        echo("Hasło zostało zmienione poprawnie");
+    }
+    else{
+        echo("Nieprawidłowe dane");
+    }
 
 }
 

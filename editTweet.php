@@ -8,7 +8,6 @@ if (isset($_SESSION['userId']) !== TRUE) {
 
     $id = $_GET['id'];
 
-
 $tweetToEdit = Tweet::LoadTweetById($id);
 
 if($_SESSION['userId'] == $tweetToEdit->getUserId()) {

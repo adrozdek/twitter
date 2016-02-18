@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas wygenerowania: 10 Lut 2016, 14:44
+-- Czas wygenerowania: 18 Lut 2016, 20:57
 -- Wersja serwera: 5.5.44-0ubuntu0.14.04.1
 -- Wersja PHP: 5.5.9-1ubuntu4.11
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `Comments` (
   PRIMARY KEY (`id`),
   KEY `tweet_id` (`tweet_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=34 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=36 ;
 
 --
 -- Zrzut danych tabeli `Comments`
@@ -74,7 +74,38 @@ INSERT INTO `Comments` (`id`, `tweet_id`, `user_id`, `comment_text`, `comment_da
 (30, 30, 8, 'Ale walka', '2016-02-09 19:15:32'),
 (31, 32, 1, 'Te¿ tak s±dzê', '2016-02-10 12:14:22'),
 (32, 32, 9, ':)', '2016-02-10 14:23:34'),
-(33, 30, 9, 'fajnie', '2016-02-10 14:34:03');
+(33, 30, 9, 'fajnie', '2016-02-10 14:34:03'),
+(34, 34, 1, ':)', '2016-02-18 20:29:44'),
+(35, 29, 1, ':(', '2016-02-18 20:30:02');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `Friends`
+--
+
+CREATE TABLE IF NOT EXISTS `Friends` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `friend1_id` int(11) NOT NULL,
+  `friend2_id` int(11) NOT NULL,
+  `accepted` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `friend1_id` (`friend1_id`),
+  KEY `friend2_id` (`friend2_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=16 ;
+
+--
+-- Zrzut danych tabeli `Friends`
+--
+
+INSERT INTO `Friends` (`id`, `friend1_id`, `friend2_id`, `accepted`) VALUES
+(6, 1, 5, 0),
+(7, 1, 9, 1),
+(9, 1, 10, 0),
+(10, 1, 6, 1),
+(13, 1, 4, 1),
+(14, 4, 5, 0),
+(15, 7, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -92,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `Messages` (
   PRIMARY KEY (`id`),
   KEY `send_id` (`send_id`),
   KEY `receive_id` (`receive_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=23 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=24 ;
 
 --
 -- Zrzut danych tabeli `Messages`
@@ -103,7 +134,7 @@ INSERT INTO `Messages` (`id`, `send_id`, `receive_id`, `message_text`, `message_
 (2, 1, 4, 'HEj co tam', '2016-02-07 07:30:09', 0),
 (3, 6, 1, 'no hej agat co tam', '2016-02-08 10:36:14', 0),
 (4, 1, 6, 'No hej Anna. Wszystko fajnie :)', '2016-02-08 22:36:04', 0),
-(5, 6, 1, 'No hej Agata. Wszystko fajnie :)', '2016-02-08 22:37:35', 1),
+(5, 6, 1, 'No hej Agata. Wszystko fajnie :)', '2016-02-08 22:37:35', 0),
 (6, 6, 1, 'Do zobaczniea Agata', '2016-02-08 22:39:36', 0),
 (7, 6, 1, 'Pa Agata', '2016-02-08 22:40:42', 0),
 (8, 1, 6, 'Lorem ipsum. By³am by³e¶ byli¶my. on ona ono. trzydzie¶ci znaków test musi byæ. co tam u ciebie', '2016-02-09 11:31:02', 1),
@@ -118,9 +149,10 @@ INSERT INTO `Messages` (`id`, `send_id`, `receive_id`, `message_text`, `message_
 (17, 8, 1, 'Hej Agata co tam?', '2016-02-09 19:15:51', 1),
 (18, 8, 6, 'Hej Anna. Co tam u Ciebie?', '2016-02-09 19:16:14', 1),
 (19, 8, 5, 'Hej Ewa co tam?', '2016-02-09 19:16:37', 1),
-(20, 10, 1, 'Hej Agata. Jestem tu nowa', '2016-02-09 19:17:31', 1),
+(20, 10, 1, 'Hej Agata. Jestem tu nowa', '2016-02-09 19:17:31', 0),
 (21, 9, 7, 'Hej Rafa³ tutaj Sasza', '2016-02-10 14:24:07', 1),
-(22, 9, 4, 'Hej Drake tutaj Sasza co tam?', '2016-02-10 14:27:19', 1);
+(22, 9, 4, 'Hej Drake tutaj Sasza co tam?', '2016-02-10 14:27:19', 1),
+(23, 1, 9, 'Hej Sasza co tam u Ciebie', '2016-02-18 20:33:49', 1);
 
 -- --------------------------------------------------------
 
@@ -159,7 +191,8 @@ INSERT INTO `Tweets` (`id`, `user_id`, `tweet_text`, `tweet_date`) VALUES
 (30, 7, 'Ogl±damy 1 z 10 :) Go go power rangers', '2016-02-09 19:07:22'),
 (31, 8, 'Ciemno ju¿', '2016-02-09 19:15:18'),
 (32, 10, 'Ale fajnie tutaj', '2016-02-09 19:17:46'),
-(33, 9, 'Ju¿ w poci±gu :]', '2016-02-10 14:21:59');
+(33, 9, 'Ju¿ w poci±gu :]', '2016-02-10 14:21:59'),
+(34, 1, 'Mam nowych przyjació³ :) A¿ trzech ju¿ potwierdzi³o!', '2016-02-16 23:26:44');
 
 -- --------------------------------------------------------
 
@@ -182,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
 --
 
 INSERT INTO `Users` (`id`, `name`, `email`, `password`, `description`) VALUES
-(1, 'Agata', 'test@test.pl', '$2y$11$AVIN9ENPENkPO5WZJ7nfq.XyLIO6ZHhhGxvpUUSFVNFGElz.5Fpeu', 'Najnowszy opis agaty 123456'),
+(1, 'Agata', 'test@test.pl', '$2y$11$MIymUiDnQtqSs.js4e18Zem8joT5RC3qSZX9s0d8ddBGBXSW8CijO', 'Najnowszy opis agaty 12345'),
 (4, 'Drake', 'Drass@wp.pl', '$2y$11$NOCJFM.3wJsY1KcddW500us.z7q5qL9Iv0HvBR6Fp1rgXfRvWbeuy', 'Hej to ja Drake. 12345'),
 (5, 'Ewa', 'lokator@gmail.com', '$2y$11$UHze0NPRZLdohzuWlDVq5.BV.AGABmrjvsoI6FUl3Bedhd4/8u.da', 'Hej jestem Ewa.'),
 (6, 'Anna', 'anna@gmail.pl', '$2y$11$P6HPX9/07Pv2J6idB9gP2uPKy9wbZ/3nPa39VDRyOsOvemiYiEFEu', 'turkawka'),
@@ -201,6 +234,13 @@ INSERT INTO `Users` (`id`, `name`, `email`, `password`, `description`) VALUES
 ALTER TABLE `Comments`
   ADD CONSTRAINT `Comments_ibfk_1` FOREIGN KEY (`tweet_id`) REFERENCES `Tweets` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `Comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`);
+
+--
+-- Ograniczenia dla tabeli `Friends`
+--
+ALTER TABLE `Friends`
+  ADD CONSTRAINT `Friends_ibfk_1` FOREIGN KEY (`friend1_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `Friends_ibfk_2` FOREIGN KEY (`friend2_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE;
 
 --
 -- Ograniczenia dla tabeli `Messages`

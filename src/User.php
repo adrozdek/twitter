@@ -42,7 +42,8 @@ class User
         return false;
     }
 
-    static public function LogInUser($email, $password) {
+    static public function LogInUser($email, $password)
+    {
         $sql = "SELECT * FROM Users WHERE email LIKE '$email'";
         $result = self::$connection->query($sql);
 
@@ -60,7 +61,8 @@ class User
         return false;
     }
 
-    static public function GetUserById($idToLoad) {
+    static public function GetUserById($idToLoad)
+    {
         $sql = "SELECT * FROM Users where id = $idToLoad";
         $result = self::$connection->query($sql);
 
@@ -75,7 +77,8 @@ class User
         return false;
     }
 
-    static public function GetAllUsers() {
+    static public function GetAllUsers()
+    {
         $ret = [];
         $sql = "SELECT * FROM Users";
         $result = self::$connection->query($sql);
@@ -97,36 +100,45 @@ class User
     private $email;
     private $description;
 
-    public function __construct($newId, $newName, $newEmail, $newDescription){
+    public function __construct($newId, $newName, $newEmail, $newDescription)
+    {
         $this->id = intval($newId);
         $this->email = $newEmail;
         $this->name = $newName;
         $this->setDescription($newDescription);
     }
-    public function getId(){
+
+    public function getId()
+    {
         return $this->id;
     }
-    public function getName(){
+
+    public function getName()
+    {
         return $this->name;
     }
-    public function getEmail(){
+
+    public function getEmail()
+    {
         return $this->email;
     }
-    public function getDescription(){
+
+    public function getDescription()
+    {
         return $this->description;
     }
 
-    public function setDescription($newDescription){
-        if(strlen($newDescription) > 0){
-            return($this->description = $newDescription);
+    public function setDescription($newDescription)
+    {
+        if (strlen($newDescription) > 0) {
+            return ($this->description = $newDescription);
+        } else {
+            return false;
         }
-        else{
-            echo("Nie udało się ustawić opisu");
-        }
-        return false;
     }
 
-    public function changePassword($oldpassword, $newPassword1, $newPassword2) {
+    public function changePassword($oldpassword, $newPassword1, $newPassword2)
+    {
 
         $sql = "SELECT * FROM Users WHERE id=$this->id";
         $result = self::$connection->query($sql);
@@ -154,46 +166,41 @@ class User
                     $result = self::$connection->query($sql2);
 
                     if ($result == true) {
-                        echo("Hasło zostało zmienione <br />");
                         return true;
                     } else {
-                        echo("Nieprawidłowe dane");
                         return false;
                     }
                 }
-                echo("Nieprawidłowe dane");
                 return false;
             }
         } else {
-            echo("Nieprawidłowe dane");
             return false;
         }
-        echo("Nieprawidłowe dane");
         return false;
     }
 
-    public function changeDescription($newDescription) {
+    public function changeDescription($newDescription)
+    {
         $this->setDescription($newDescription);
 
         $sql = "UPDATE Users SET description ='$this->description' WHERE id=$this->id";
         $result = self::$connection->query($sql);
         if ($result === TRUE) {
-            echo("Opis został zmieniony");
             return TRUE;
         }
-        echo("Nie udało się zmienić opisu.");
         return false;
     }
 
-    public function loadAllTweets(){
+    public function loadAllTweets()
+    {
         $ret = [];
 
         $sql = "SELECT * FROM Tweets WHERE user_id = $this->id ORDER BY tweet_date DESC";
         $result = self::$connection->query($sql);
 
-        if($result !== FALSE){
-            if($result->num_rows > 0){
-                while($row = $result->fetch_assoc()) {
+        if ($result !== FALSE) {
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
                     $tweet = new Tweet($row['id'], $row['user_id'], $row['tweet_text'], $row['tweet_date']);    //zamiast id użytkownika mamy jego imię, można tak?
                     //var_dump($tweet);
                     //echo($tweet->getTweetText());
@@ -205,7 +212,8 @@ class User
         return $ret;
     }
 
-    public function loadAllSentMessages(){
+    public function loadAllSentMessages()
+    {
         $ret = [];
 
         $sql = "SELECT * FROM Messages WHERE send_id=$this->id ORDER BY message_date DESC";
@@ -226,7 +234,8 @@ class User
         return false;
     }
 
-    public function loadAllReceivedMessages(){
+    public function loadAllReceivedMessages()
+    {
         $ret = [];
 
         $sql = "SELECT * FROM Messages WHERE receive_id=$this->id ORDER BY message_date DESC";
@@ -248,67 +257,161 @@ class User
         return false;
     }
 
-    public function checkIfYouAskedFS($friend2) {
+    public function checkIfYouAskedFS($friend2)
+    {
         $sql = "SELECT * FROM Friends WHERE friend1_id = $this->id AND friend2_id = $friend2";
         $result = self::$connection->query($sql);
 
-        if($result == true) {
-            if($result->num_rows != 0) {
+        if ($result == true) {
+            if ($result->num_rows != 0) {
                 return true;
-            } else{
+            } else {
                 return false;
             }
-        }
-        else{
+        } else {
             return false;
         }
 
     }
 
-    public function checkIfFriendshipExist($friend2) {
+    public function checkIfFriendshipExist($friend2)
+    {
         //do zmiany w jedno zapytanie:
         $sql = "SELECT * FROM Friends WHERE (friend1_id = $this->id AND friend2_id = $friend2 AND accepted = 1) OR (friend2_id = $this->id AND friend1_id = $friend2 AND accepted = 1)";
         $result = self::$connection->query($sql);
 
-        if($result == true) {
-            if($result->num_rows != 0) {
+        if ($result == true) {
+            if ($result->num_rows != 0) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
-        }
-        else{
+        } else {
             return false;
         }
     }
 
-    public function acceptFriendship($friendAsking) {
+    public function acceptFriendship($friendAsking)
+    {
         $sql = "UPDATE Friends SET accepted = 1 WHERE friend2_id = $this->id AND friend1_id = $friendAsking";
         $result = self::$connection->query($sql);
 
-        if($result == true) {
+        if ($result == true) {
             return true;
         } else {
             return false;
         }
     }
 
-    public function removeFriendship($friendAsking) {
+    public function removeFriendship($friendAsking)
+    {
         $sql = "DELETE FROM Friends WHERE (friend1_id = $this->id AND friend2_id = $friendAsking) OR (friend1_id = $friendAsking AND friend2_id = $this->id) ";
         $result = self::$connection->query($sql);
 
-        if($result == true){
+        if ($result == true) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
 
     }
 
+    public function getAllFriends()
+    {
+        $sql = "SELECT * FROM Users JOIN Friends ON Friends.friend2_id = Users.id WHERE Friends.friend1_id = $this->id AND Friends.accepted = 1 ORDER BY Users.name ASC";
+        //ważne, że accepted = 1. chcemy tylko potwierdzonych przyjaciół.
+        $result = self::$connection->query($sql);
+
+        if ($result == true) {
+            $ret = [];
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    //var_dump($row);
+                    $user = new User($row['friend2_id'], $row['name'], $row['email'], $row['description']);
+                    //friend2_id, bo chcemy id usera, który jest przyjacielem, a nie id z Friends !! (var_dump($row)
+                    $ret[] = $user;
+                    //var_dump($user);
+                }
+                return $ret;
+            }
+        } else {
+            return false;
+        }
+
+    }
+
+    public function getAllFriendsAndMineTweets()
+    {
+        $sql = "SELECT * FROM Tweets JOIN Friends ON Tweets.user_id = Friends.friend2_id OR Tweets.user_id = $this->id WHERE Friends.friend1_id = $this->id AND Friends.accepted = 1 ORDER BY Tweets.tweet_date DESC";
+        $result = self::$connection->query($sql);
+
+        if ($result == true) {
+            $ret = [];
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    //var_dump($row);
+                    $tweet = new Tweet($row['id'], $row['user_id'], $row['tweet_text'], $row['tweet_date']);
+                    $ret[] = $tweet;
+                    //var_dump($tweet);
+                }
+                return $ret;
+            }
+        } else {
+            return false;
+        }
+
+    }
+
+    public function getAllInvitation()
+    {
+        $sql = "SELECT * FROM Users JOIN Friends ON Friends.friend1_id = Users.id WHERE Friends.friend2_id = $this->id AND Friends.accepted = 0";
+        $result = self::$connection->query($sql);
+
+        if ($result == true) {
+            $ret = [];
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    //var_dump($row);
+                    $user = new User($row['friend1_id'], $row['name'], $row['email'], $row['description']);
+                    //friend2_id, bo chcemy id usera, który jest przyjacielem, a nie id z Friends !! (var_dump($row)
+                    $ret[] = $user;
+                    //var_dump($user);
+                }
+                return $ret;
+            }
+        } else {
+            return false;
+        }
+
+
+    }
+
+    public function getAllSentInvitation()
+    {
+        $sql = "SELECT * FROM Users JOIN Friends ON Friends.friend2_id = Users.id WHERE Friends.friend1_id = $this->id AND Friends.accepted = 0";
+        $result = self::$connection->query($sql);
+
+        if ($result == true) {
+            $ret = [];
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    //var_dump($row);
+                    $user = new User($row['friend2_id'], $row['name'], $row['email'], $row['description']);
+                    //friend2_id, bo chcemy id usera, który jest przyjacielem, a nie id z Friends !! (var_dump($row)
+                    $ret[] = $user;
+                    //var_dump($user);
+                }
+                return $ret;
+            }
+        } else {
+            return false;
+        }
+
+
+    }
 
 
 }
+
 
 ?>

@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $user = User::LogInUser($_POST['email'], $_POST['password']);
     if ($user !== FALSE) {
         $_SESSION['userId'] = $user->getId();
-        header("Location: showUser.php");
+        header("Location: indeks.php");
     } else {
         echo("Zle dane logowania");
     }
